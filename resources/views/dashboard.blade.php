@@ -211,7 +211,7 @@
                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-bold" style="background: rgba(16, 185, 129, 0.08); color: #10b981; border-color: rgba(16, 185, 129, 0.15); font-size: 0.78rem;">🔐 Admin Panel</span>
                 </div>
                 <h2 class="fw-extrabold text-dark m-0" style="font-weight: 800; letter-spacing: -0.03em; font-size: 2.1rem;">Pusat Kontrol Spasial</h2>
-                <p class="text-muted m-0 mt-2" style="font-size: 0.95rem; line-height: 1.5;">Kelola laporan masyarakat, pantau rute armada truk sampah, dan atur cakupan batas wilayah kebersihan pesantren secara terpusat.</p>
+                <p class="text-muted m-0 mt-2" style="font-size: 0.95rem; line-height: 1.5;">Kelola laporan masyarakat, pantau rute armada truk sampah, dan atur cakupan batas wilayah kebersihan secara terpusat.</p>
             </div>
             <div class="col-md-5 text-md-end">
                 <a href="{{ route('map') }}" class="btn btn-success shadow-sm px-4 py-2.5"><i class="fa-solid fa-map-location-dot me-2"></i> Buka Peta Input</a>

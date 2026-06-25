@@ -10,7 +10,7 @@
             background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
                         radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
                         #ffffff;
-            padding: 8rem 0 6rem;
+            padding: 2.5rem 0 3.5rem; /* reduced top padding for tighter header */
             border-bottom: 1px solid rgba(15, 23, 42, 0.04);
         }
 
@@ -18,11 +18,11 @@
         .hero-landing::before {
             content: '';
             position: absolute;
-            width: 350px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
-            top: -100px;
-            right: 10%;
+            top: -40px;
+            right: 8%;
             z-index: 0;
             pointer-events: none;
         }
@@ -30,11 +30,11 @@
         .hero-landing::after {
             content: '';
             position: absolute;
-            width: 450px;
-            height: 450px;
+            width: 420px;
+            height: 420px;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
-            bottom: -150px;
-            left: -50px;
+            bottom: -80px;
+            left: -30px;
             z-index: 0;
             pointer-events: none;
         }
@@ -48,15 +48,21 @@
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            padding: 0.6rem 1.2rem;
+            padding: 0.55rem 1rem;
             background: rgba(16, 185, 129, 0.08);
             border: 1px solid rgba(16, 185, 129, 0.15);
             color: #065f46;
             border-radius: 999px;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem; /* reduce space under badge */
             font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.02em;
+        }
+
+        @media (min-width: 992px) {
+            .hero-landing {
+                padding: 3.5rem 0 4rem;
+            }
         }
 
         .hero-title {
@@ -259,7 +265,7 @@
                             <a href="{{ route('login') }}" class="btn btn-outline-success btn-lg">Login Admin</a>
                         @endauth
                     </div>
-                    <p class="welcome-footer-note">wasteCare menggabungkan kecanggihan data spasial (GIS) dan pemetaan interaktif untuk mendukung lingkungan pesantren yang bersih, higienis, dan berkelanjutan.</p>
+                    <p class="welcome-footer-note">wasteCare menggabungkan kecanggihan data spasial (GIS) dan pemetaan interaktif untuk mendukung lingkungan yang bersih, higienis, dan berkelanjutan.</p>
                 </div>
                 <div class="col-lg-6">
                     <div class="welcome-hero-visual">
@@ -271,7 +277,7 @@
         </div>
     </section>
 
-    <section class="container my-5 py-5">
+    <section class="container my-4 py-4">
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="feature-card h-100">
@@ -297,12 +303,12 @@
         </div>
     </section>
 
-    <section class="container pb-5 mb-4">
+    <section class="container pb-4 mb-3">
         <div class="promo-banner">
             <div class="row align-items-center gy-4">
                 <div class="col-md-8">
                     <h3>Solusi Geospasial Modern untuk Mewujudkan Lingkungan Asri</h3>
-                    <p class="mb-0 mt-2">wasteCare menghubungkan warga, pengurus pondok pesantren, dan pengelola kebersihan melalui peta kolaboratif yang transparan dan dapat dipantau setiap saat.</p>
+                    <p class="mb-0 mt-2">wasteCare menghubungkan warga, pengurus, dan pengelola kebersihan melalui peta kolaboratif yang transparan dan dapat dipantau setiap saat.</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <span class="feature-spark">Terintegrasi · Bersih · Responsif</span>
@@ -310,4 +316,10 @@
             </div>
         </div>
     </section>
+
+    <style>
+        /* tighten footer spacing inside welcome page */
+        .promo-banner { margin-bottom: 0.5rem; }
+        .welcome-footer-note { margin-top: 1.5rem; }
+    </style>
 @endsection

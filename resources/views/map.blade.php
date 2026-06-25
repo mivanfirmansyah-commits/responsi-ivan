@@ -4,18 +4,39 @@
 
 @section('styles')
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
         body {
             background: #eef2f7;
         }
 
-        .main-container {
+        main {
             flex-grow: 1;
+            min-height: calc(100vh - 80px);
+            height: calc(100vh - 80px);
+            overflow: hidden;
+        }
+
+        .main-container {
             display: flex;
-            min-height: calc(100vh - 66px);
-            height: calc(100vh - 66px);
-            position: relative;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            bottom: 0;
             overflow: hidden;
             background: #eef2f7;
+            width: 100%;
+            padding-top: 12px;
+        }
+
+        #map {
+            min-height: 100%;
         }
 
         /* Floating Sidebar Design - Mapbox Aesthetic */
@@ -75,6 +96,19 @@
             color: #065f46;
             font-size: 0.88rem;
             font-weight: 600;
+        }
+
+        .btn-geolocate {
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .btn-geolocate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* Custom Tab Pill styling */
@@ -176,25 +210,26 @@
             width: 100%;
             position: relative;
             z-index: 1;
+            min-height: calc(100vh - 66px);
         }
 
         /* Modernized Sidebar Toggle Button */
         .sidebar-toggle-btn {
             position: absolute;
             top: 24px;
-            right: -46px;
+            right: -65px;
             z-index: 1005;
             background: #ffffff;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 16px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
-            font-size: 16px;
+            box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+            font-size: 20px;
             color: #10b981;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
@@ -203,8 +238,12 @@
         .sidebar-toggle-btn:hover {
             background-color: #10b981;
             color: #ffffff;
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+            transform: translateX(0) scale(1.05);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.25);
+        }
+
+        .sidebar-toggle-btn:active {
+            transform: translateX(0) scale(0.98);
         }
 
         .footer-note {
@@ -364,8 +403,11 @@
                     <div class="tab-pane fade show active" id="panel-point" role="tabpanel">
                         <div class="sidebar-control-card">
                             <p class="info-tag mb-3">Klik tombol di bawah lalu klik satu titik di peta untuk menandai lokasi tumpukan sampah.</p>
-                            <button type="button" id="btn-draw-point"
-                                class="btn btn-outline-success w-100 btn-sm fw-bold py-2 mb-3">➕ Tentukan Lokasi Titik</button>
+                            <div class="d-flex gap-2 mb-3">
+                                <button type="button" id="btn-draw-point"
+                                    class="btn btn-outline-success w-100 btn-sm fw-bold py-2">➕ Tentukan Lokasi Titik</button>
+                                <button type="button" id="btn-geolocate" class="btn btn-success btn-sm fw-bold py-2" title="Gunakan lokasi GPS perangkat">📍 Lokasi Saya</button>
+                            </div>
                             <form action="{{ route('points.store') }}" method="POST" enctype="multipart/form-data"
                                 class="card card-body bg-white border-0 p-3 shadow-sm d-none" id="form-point">
                                 @csrf
@@ -577,6 +619,54 @@
             } else {
                 resetDrawingState();
             }
+        });
+
+        document.getElementById('btn-geolocate')?.addEventListener('click', function() {
+            const geoButton = this;
+            if (!navigator.geolocation) {
+                alert('Peramban Anda tidak mendukung geolokasi. Silakan pilih lokasi secara manual di peta.');
+                return;
+            }
+
+            geoButton.disabled = true;
+            geoButton.innerHTML = '⏳ Mencari Lokasi...';
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude.toFixed(6);
+                const lng = position.coords.longitude.toFixed(6);
+                const latInp = document.getElementById('lat-point');
+                const lngInp = document.getElementById('lng-point');
+                const formPoint = document.getElementById('form-point');
+
+                if (latInp) latInp.value = lat;
+                if (lngInp) lngInp.value = lng;
+                if (formPoint) formPoint.classList.remove('d-none');
+
+                const newLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+                if (tempMarker) {
+                    tempMarker.setLatLng(newLatLng);
+                } else {
+                    tempMarker = L.marker(newLatLng).addTo(map);
+                }
+                map.setView(newLatLng, 17);
+                if (!isDrawing) {
+                    isDrawing = true;
+                    document.getElementById('btn-draw-point').className = "btn btn-danger w-100 btn-sm fw-bold py-2 mb-3";
+                    document.getElementById('btn-draw-point').innerHTML = "🛑 Batalkan Penempatan";
+                    mapContainer?.classList.add('drawing-mode');
+                }
+
+                geoButton.innerHTML = '📍 Lokasi Saya';
+                geoButton.disabled = false;
+            }, function(error) {
+                alert('Gagal mengambil lokasi. Pastikan izin lokasi diizinkan dan coba lagi.');
+                geoButton.innerHTML = '📍 Lokasi Saya';
+                geoButton.disabled = false;
+            }, {
+                enableHighAccuracy: true,
+                timeout: 12000,
+                maximumAge: 0
+            });
         });
 
         // 2. Event Listener Garis/Rute (Hanya Admin)

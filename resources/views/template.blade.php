@@ -52,9 +52,15 @@
 
         /* Glassmorphism Navbar */
         .navbar {
-            background: rgba(15, 23, 42, 0.88) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1100;
+            background: #0f172a !important;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 0.85rem 0;
             transition: all 0.3s ease;
@@ -66,9 +72,32 @@
         }
 
         .navbar-brand {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .navbar .navbar-nav {
+            align-items: center;
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(248, 250, 252, 0.25);
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1);
+        }
+
+        .navbar .navbar-collapse {
+            justify-content: flex-end;
+        }
+
+        main {
+            margin-top: 80px;
         }
 
         /* Iconic brand font styling */
@@ -251,11 +280,12 @@
         }
 
         .footer-base {
-            background: #ffffff;
-            border-top: 1px solid var(--eco-border);
-            padding: 1.75rem 0;
-            color: var(--eco-muted);
+            background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(11,18,28,0.98));
+            border-top: 1px solid rgba(255,255,255,0.03);
+            padding: 0.9rem 0;
+            color: rgba(248,250,252,0.8);
             margin-top: auto;
+            box-shadow: 0 -8px 30px rgba(2,6,23,0.25);
         }
 
         /* Leaflet Popups Revamp */
